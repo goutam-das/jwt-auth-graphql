@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv/config";
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from "type-graphql";
@@ -15,8 +16,10 @@ import { createConnection } from 'typeorm';
         });
         // Create ApolloServer
         const apolloServer = new ApolloServer({
-            schema
+            schema,
+            context: ({req, res}) => ({req, res})
         });
+        // Create express server
         const app = express();
         apolloServer.applyMiddleware({ app });
         app.listen(process.env.PORT,() => {
