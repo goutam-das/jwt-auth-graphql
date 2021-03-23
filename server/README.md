@@ -2,7 +2,7 @@
 
 Tasks | Done
 :---------|:-----------
-Setup a GraphQL server using TypeGraphQL and TypeORM | 
+Setup a GraphQL server using TypeGraphQL and TypeORM | :heavy_check_mark:
 Register a user | 
 Login and create access and refresh tokens | 
 Authenticated mutations/queries | 
