@@ -7,18 +7,14 @@ import { IPayload } from '../types';
 
 export const refreshToken = async (req: Request, res: Response): Promise<Response> => {
     const token = req.cookies.jid;
-    if (!token)
-        return res.send({ ok: false, accessToken: "" });
-
+    if (!token) return res.send({ ok: false, accessToken: "" });
     let payload: IPayload | null = null;
-
     try {
         payload = verify(token, process.env.REFRESH_TOKEN_SECRET_KEY!) as IPayload;
     } catch (error) {
         console.log(error);
         return res.send({ ok: false, accessToken: "" });
     }
-
     // token is valid and
     // we can send an access token
     const user = await User.findOne({ where: { id: payload?.userId } });
