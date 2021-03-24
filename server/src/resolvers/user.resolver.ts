@@ -3,6 +3,7 @@ import { hash, compare } from 'bcryptjs';
 import User from '../entities/user.entity';
 import { MyContext } from '../types';
 import { createAccessToken, createRefreshToken } from '../lib/auth';
+import { sendRefreshToken } from '../lib/sendRefreshToken';
 import { isAuth } from '../middlewares/isAuth';
 
 @ObjectType()
@@ -51,7 +52,7 @@ export default class UserResolver {
         const validPassword = await compare(password, user.password);
         if (!validPassword) throw new Error("Wrong email or password");
         // Set Refresh Token
-        res.cookie('jid', createRefreshToken(user), { httpOnly: true });
+        sendRefreshToken(res, createRefreshToken(user));
         return {
             accessToken: createAccessToken(user)
         };

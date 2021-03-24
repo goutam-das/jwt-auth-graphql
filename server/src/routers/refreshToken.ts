@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import User from '../entities/user.entity';
-import { createAccessToken } from '../lib/auth';
+import { createAccessToken, createRefreshToken } from '../lib/auth';
+import { sendRefreshToken } from '../lib/sendRefreshToken';
 
 export const refreshToken = async (req: Request, res: Response): Promise<Response> => {
     const token = req.cookies.jid;
@@ -19,5 +20,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<Respons
     // we can send an access token
     const user = await User.findOne({ where: { id: payload?.userId } });
     if (!user) return res.send({ ok: false, accessToken: "" });
+    // Set Refresh Token
+    sendRefreshToken(res, createRefreshToken(user));
     return res.send({ ok: true, accessToken: createAccessToken(user) });
 }
