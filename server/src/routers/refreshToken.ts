@@ -10,12 +10,14 @@ export const refreshToken = async (req: Request, res: Response): Promise<Respons
         return res.send({ ok: false, accessToken: "" });
 
     let payload: any = null;
+
     try {
         payload = verify(token, process.env.REFRESH_TOKEN_SECRET_KEY!)
     } catch (error) {
         console.log(error);
         return res.send({ ok: false, accessToken: "" });
     }
+    
     // token is valid and
     // we can send an access token
     const user = await User.findOne({ where: { id: payload?.userId } });
